@@ -31,7 +31,7 @@ export const ComicKZInfo: SourceInfo = {
     name: "ComicKZ",
     description: "ComicKZ source extension for Paperback 0.8",
     author: "ImranMZ",
-    authorWebsite: "",
+    authorWebsite: "https://github.com/ImranMZ",
     icon: "icon.png",
     contentRating: ContentRating.EVERYONE,
     websiteBaseURL: BASE_URL,
