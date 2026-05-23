@@ -1,0 +1,7 @@
+node_modules/
+lib/
+*.js
+!**/*.ts
+!.eslintrc.js
+dist/
+.DS_Store
