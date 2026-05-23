@@ -50,6 +50,20 @@ jobs:
             fi
           done
 
+      - name: Fix repo name case in index.html
+        shell: bash
+        run: |
+          REPO_NAME="${{ github.repository }}"
+          CORRECT_NAME="${REPO_NAME#*/}"
+          LOWERCASE_NAME=$(echo "$CORRECT_NAME" | tr '[:upper:]' '[:lower:]')
+          INDEX_FILE="./bundles/${{ steps.extract_branch.outputs.branch }}/index.html"
+          if [ "$CORRECT_NAME" != "$LOWERCASE_NAME" ]; then
+            sed -i "s/$LOWERCASE_NAME/$CORRECT_NAME/g" "$INDEX_FILE"
+            echo "Fixed case: $LOWERCASE_NAME -> $CORRECT_NAME in $INDEX_FILE"
+          else
+            echo "No case difference needed"
+          fi
+
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
