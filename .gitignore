@@ -5,3 +5,4 @@ lib/
 !.eslintrc.js
 dist/
 .DS_Store
+bundles/
