@@ -40,6 +40,16 @@ jobs:
         shell: bash
         run: npm run bundle -- --folder=${{ steps.extract_branch.outputs.branch }}
 
+      - name: Create index.js for each source
+        shell: bash
+        run: |
+          for dir in ./bundles/${{ steps.extract_branch.outputs.branch }}/*/; do
+            if [ -f "${dir}source.js" ]; then
+              cp "${dir}source.js" "${dir}index.js"
+              echo "Created ${dir}index.js"
+            fi
+          done
+
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
