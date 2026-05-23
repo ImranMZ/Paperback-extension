@@ -6,6 +6,7 @@ on:
       - '0.8'
 permissions:
   contents: write
+  pages: write
 jobs:
   build:
     name: Bundle and Publish Sources
@@ -47,3 +48,20 @@ jobs:
           keep_files: true
           user_name: 'github-actions[bot]'
           user_email: 'github-actions[bot]@users.noreply.github.com'
+
+      - name: Enable GitHub Pages (try create, then update)
+        shell: bash
+        run: |
+          STATUS=$(curl -s -o /dev/null -w "%{http_code}" -L -X POST \
+            -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            -H "Accept: application/vnd.github.v3+json" \
+            https://api.github.com/repos/${{ github.repository }}/pages \
+            -d '{"source":{"branch":"gh-pages","path":"/"}}')
+          if [ "$STATUS" = "409" ]; then
+            echo "Pages already enabled, updating config..."
+            curl -L -X PUT \
+              -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+              -H "Accept: application/vnd.github.v3+json" \
+              https://api.github.com/repos/${{ github.repository }}/pages \
+              -d '{"source":{"branch":"gh-pages","path":"/"}}'
+          fi
