@@ -905,7 +905,7 @@ var _Sources = (() => {
     name: "ComicKZ",
     description: "ComicKZ source extension for Paperback 0.8",
     author: "ImranMZ",
-    authorWebsite: "",
+    authorWebsite: "https://github.com/ImranMZ",
     icon: "icon.png",
     contentRating: import_types2.ContentRating.EVERYONE,
     websiteBaseURL: BASE_URL,
