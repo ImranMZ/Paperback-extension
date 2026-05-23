@@ -4,12 +4,12 @@ on:
     branches:
       - 'main'
       - '0.8'
+permissions:
+  contents: write
 jobs:
   build:
     name: Bundle and Publish Sources
     runs-on: ubuntu-latest
-    env:
-      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
     strategy:
       matrix:
@@ -29,17 +29,6 @@ jobs:
         run: echo "branch=${GITHUB_REF#refs/heads/}" >> $GITHUB_OUTPUT
         id: extract_branch
 
-      - name: Create bundles directory
-        shell: bash
-        run: mkdir -p bundles
-
-      - name: Checkout existing bundles
-        uses: actions/checkout@v4
-        continue-on-error: true
-        with:
-          ref: gh-pages
-          path: bundles
-
       - run: npm install
 
       - name: Run bundle
@@ -47,7 +36,10 @@ jobs:
         run: npm run bundle -- --folder=${{ steps.extract_branch.outputs.branch }}
 
       - name: Deploy to GitHub Pages
-        uses: JamesIves/github-pages-deploy-action@v4
+        uses: peaceiris/actions-gh-pages@v3
         with:
-          branch: gh-pages
-          folder: bundles
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./bundles
+          keep_files: true
+          user_name: 'github-actions[bot]'
+          user_email: 'github-actions[bot]@users.noreply.github.com'
